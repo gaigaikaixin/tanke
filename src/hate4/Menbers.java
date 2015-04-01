@@ -2,14 +2,40 @@ package hate4;
 import java.util.Vector;
 
 import hate4.TankWar2Thread;
-
+//炸弹类
+class Bomb
+{
+	//准备图片，建立炸弹类，击中时建立炸弹加入到素组中，最后画出炸弹
+	//坐标
+	int x,y;
+	//炸弹的生命
+	int life=9;
+	boolean isLive=true;
+	public Bomb(int x,int y)
+	{
+		this.x=x;
+		this.y=y;
+	}
+	//减少炸弹的生命值
+	public void lifeDown()
+	{
+		if(life>0)
+		{
+			life--;
+		}
+		else
+		{
+			this.isLive=false;
+		}
+	}
+}
 
 //子弹类
 class Shoot implements Runnable
 {
 	int x;
 	int y;
-	int direct;
+    int direct;
 	int speed=3;
 	//子弹是否还活着
 	boolean isLive=true;
@@ -30,7 +56,6 @@ class Shoot implements Runnable
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//子弹跑起来
 			switch(direct)
 			{
 			case 0:
@@ -45,7 +70,6 @@ class Shoot implements Runnable
 			case 3:
 				x-=speed;
 				break;
-				
 			}
 			//System.out.println("子弹坐标的x="+x+"y="+y);
 			//解决子弹死亡的问题
@@ -74,6 +98,7 @@ class Shoot implements Runnable
 		int speed=3;
 		//坦克的color
 		int color=0;
+		boolean isLive=true;
 		
 		public int getColor() {
 			return color;
@@ -122,23 +147,148 @@ class Shoot implements Runnable
 		
 	}
 	
-	//敌人的坦克类
-	class HighCool extends Tank
+	//敌人的坦克类，将其做成线程类
+	class HighCool extends Tank  implements Runnable
 	{
-		boolean isLive=true;
+		int times=0;
+		
+		//定义向量，装子弹
+		Vector<Shoot> hcShoot=new Vector<Shoot>();
+		//敌人添加子弹，应当放在杠杆创建坦克好人敌人的坦克死亡之后
 		public HighCool(int x,int y)
 		{
 			super(x,y);
 		}
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			while(true)
+			{
+								
+				switch(this.direct)
+				{
+				case 0:
+					//说明坦克正在向上移动,坦克在一个方向上走30
+					//再换方向
+					for(int i=0;i<30;i++)
+					{
+						if(y>0)
+						{
+					    y-=speed;
+						}
+
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}
+					break;
+					
+				case 1:
+					for(int i=0;i<30;i++)
+					{
+						if(x<360)
+						{
+				           x+=speed;
+						}
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				     break;
+				case 2:
+					for(int i=0;i<30;i++)
+					{
+						if(y<235)
+						{
+					       y+=speed;
+						}
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}
+					break;
+				case 3:
+					for(int i=0;i<30;i++)
+					{
+						if(x>0)
+						{
+					      x-=speed;
+						}
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}
+					break;
+				}
+				//让敌人的额坦克可以连续打子弹
+				this.times++;
+				if(times%2==0)
+				{
+					if(isLive)
+					{
+						if(hcShoot.size()<5)
+						{	
+						             Shoot s=null;
+						             //没有子弹，添加
+										switch(direct)
+										{
+										case 0:
+											s=new Shoot(x+10,y,0);
+											hcShoot.add(s);
+											break;
+										case 1:
+											s=new Shoot(x+30,y+10,1);
+											hcShoot.add(s);
+											break;
+										case 2:
+											s=new Shoot(x+10,y+30,2);
+											hcShoot.add(s);
+											break;
+										case 3:
+											s=new Shoot(x,y+10,3);
+											hcShoot.add(s);
+											break;
+										}
+										//启动子弹线程
+										Thread t=new Thread(s);
+										t.start();
+									}
+				              }
+					    }
+				//让坦克随机产生一个新的方向
+				this.direct=(int)(Math.random()*4);
+				//判断敌人的坦克是否死亡
+				if(this.isLive==false)
+				{      
+					//敌人的坦克死亡后退出线程
+					break;
+				}
+				
+			}
 	}
+	}
+	
 	
 	//我的坦克，继承刚才的坦克
 	class Masa extends Tank
 	{
 		//我的子弹
-		Vector<Shoot> sh=new Vector<Shoot>();
+		//Shoot s=null;
+		Vector<Shoot> ss=new Vector<Shoot>();
 		Shoot s=null;
-	
+		
 	 
 		public Masa(int x,int y)
 		{
@@ -148,23 +298,23 @@ class Shoot implements Runnable
 				public void shootEnemy()
 				{
 					
-					switch(this.direct)
+					switch(this.getDirect())
 					{
 					case 0:
 						s=new Shoot(x+10,y,0);
-						sh.add(s);
+						ss.add(s);
 						break;
 					case 1:
 						s=new Shoot(x+30,y+10,1);
-						sh.add(s);
+						ss.add(s);
 						break;
 					case 2:
 						s=new Shoot(x+10,y+30,2);
-						sh.add(s);
+						ss.add(s);
 						break;
 					case 3:
 						s=new Shoot(x,y+10,3);
-						sh.add(s);
+						ss.add(s);
 						break;
 					}
 					//启动子弹线程
@@ -188,7 +338,7 @@ class Shoot implements Runnable
 		public void moveDown()
 		{
 		    y+=speed;
-		} 
+		}
 		//坦克向left移动
 		public void moveLeft()
 		{
@@ -196,5 +346,6 @@ class Shoot implements Runnable
 		}
 		
 	} 
+	
 
 
