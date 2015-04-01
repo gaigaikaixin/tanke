@@ -11,12 +11,15 @@
  */
 package hate4;
 import java.awt.*;
+import java.io.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.util.*;
 import java.awt.event.*;
 import java.util.Vector;
+
 public class TankWar2Thread extends JFrame {
  
 	MyTankPanel mytp=null;
@@ -86,11 +89,25 @@ public class TankWar2Thread extends JFrame {
 				t2.start();
 				highcool.add(hc);
 			}
+			try{
+				ima1=ImageIO.read(new File("big.png"));
+				ima2=ImageIO.read(new File("small.png"));
+				ima3=ImageIO.read(new File("middle.png"));
+			}catch(Exception e){
+				
+			}
 			//初始化爆炸图片
-			ima1=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
-			ima2=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/middle.png"));
-			ima3=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
-			
+			try{
+				ima1=ImageIO.read(new File("big.png"));
+				ima2=ImageIO.read(new File("small.png"));
+				ima3=ImageIO.read(new File("middle.png"));
+			}catch(Exception e){
+				
+			}
+		//	ima1=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
+		//	ima2=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/middle.png"));
+		//	ima3=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
+		//	
 		}
 	//重写paint函数,画出自己的坦克
 		public void paint(Graphics g)
