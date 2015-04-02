@@ -7,6 +7,12 @@
  * 5.击中敌人的坦克，坦克爆炸
  * 6.敌人的坦克可以动起来
  * 7.当地人击中我的坦克时，我的坦克死掉
+ * 6.1 防止敌人的坦克重叠运动
+ *   6.1.1判断是否碰撞的函数写到HighCool中
+ * 8.可以有关卡
+ * 9.可以暂停和继续
+ * 10.可记录玩家成绩
+ * 11java操作声音文件
  * 
  */
 package hate4;
@@ -79,6 +85,9 @@ public class TankWar2Thread extends JFrame {
 			    //hc.setColor(1);
 				//加入到highcool
 				hc.setDirect(2);
+				// 将MyPanel的敌人坦克喜爱尼古拉ing交给敌人的坦克
+				hc.setHcs(highcool);
+				//启动敌人的坦克
 				Thread t=new Thread(hc);
 				t.start();
 				//当敌人的坦克干干创建的时候给其添加一个子弹,并加到敌人的中

@@ -151,7 +151,8 @@ class Shoot implements Runnable
 	class HighCool extends Tank  implements Runnable
 	{
 		int times=0;
-		
+		//定义一个响亮，用来装MyPanel上所有敌人的坦克
+		Vector<HighCool>  hcs=new Vector<HighCool>();
 		//定义向量，装子弹
 		Vector<Shoot> hcShoot=new Vector<Shoot>();
 		//敌人添加子弹，应当放在杠杆创建坦克好人敌人的坦克死亡之后
@@ -159,6 +160,190 @@ class Shoot implements Runnable
 		{
 			super(x,y);
 		}
+		
+		//得到MyPanel上的敌人向量
+		public void setHcs(Vector<HighCool> vv)
+		{
+			this.hcs=vv;
+		}
+		
+		
+		//判断是否撞到别的敌人的坦克了
+		public boolean isTouchOtherEnemy()
+		{
+			boolean b=false;
+			
+			switch(this.direct)
+			{
+			case 0:
+				//这个坦克向上，
+				//去除所有塔克
+				for(int i=0;i<hcs.size();i++)
+				{
+					//取出第一个坦克
+					HighCool hc=hcs.get(i);
+					//如果这个取出的坦克不是这个坦克
+					if(hc!=this)
+					{
+						//其他的坦克向上或者向下
+						if(hc.direct==0||hc.direct==2)
+						{
+							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y>=hc.y&&this.y<=hc.y+30)
+							{
+								return true;
+							}
+							if(this.x>=hc.x&&this.x+20<=hc.x+20&&this.y<=hc.y&&this.y<=hc.y+30)
+							{
+								return true;
+							}
+						}
+						
+						
+						//敌人的坦克是向右或者左
+						if(hc.direct==3||hc.direct==1)
+						{
+							if(this.x>=hc.x&&this.x<=hc.x+30&&this.y>=hc.y&&this.y<=hc.y+20)
+							{
+								return true;
+							}
+							if(this.x>=hc.x&&this.x+20<=hc.x+30&&this.y<=hc.y&&this.y<=hc.y+20)
+							{
+								return true;
+							} 
+						}
+					}
+					
+				}
+				
+				break;
+			case 1:
+				//这个坦克向右
+				for(int i=0;i<hcs.size();i++)
+				{
+					//取出第一个坦克
+					HighCool hc=hcs.get(i);
+					//如果这个取出的坦克不是这个坦克
+					if(hc!=this)
+					{
+						//其他的坦克向上或者向下
+						if(hc.direct==0||hc.direct==2)
+						{
+							if(this.x+30>=hc.x&&this.x+30<=hc.x+20&&this.y>=hc.y&&this.y<=hc.y+30)
+							{
+								return true;
+							}
+							if(this.x+30>=hc.x&&this.x+30<=hc.x+20&&this.y<=hc.y&&this.y<=hc.y+30)
+							{
+								return true;
+							}
+						}
+						
+						
+						//敌人的坦克是向右或者左
+						if(hc.direct==3||hc.direct==1)
+						{
+							if(this.x+30>=hc.x&&this.x+30<=hc.x+30&&this.y+20>=hc.y&&this.y+20<=hc.y+20)
+							{
+								return true;
+							}
+							if(this.x+30>=hc.x&&this.x+30<=hc.x+30&&this.y+20<=hc.y&&this.y+20<=hc.y+20)
+							{
+								return true;
+							} 
+						}
+					}
+					
+				}
+				
+				break;
+			case 2:
+				//这个坦克向下
+				for(int i=0;i<hcs.size();i++)
+				{
+					//取出第一个坦克
+					HighCool hc=hcs.get(i);
+					//如果这个取出的坦克不是这个坦克
+					if(hc!=this)
+					{
+						//其他的坦克向上或者向下
+						if(hc.direct==0||hc.direct==2)
+						{
+							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y+30>=hc.y&&this.y+30<=hc.y+30)
+							{
+								return true;
+							}
+							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y+30<=hc.y&&this.y+30<=hc.y+30)
+							{
+								return true;
+							}
+						}
+						
+						
+						//敌人的坦克是向右或者左
+						if(hc.direct==3||hc.direct==1)
+						{
+							if(this.x+20>=hc.x&&this.x+20<=hc.x+30&&this.y+30>=hc.y&&this.y+30<=hc.y+20)
+							{
+								return true;
+							}
+							if(this.x+20>=hc.x&&this.x+20<=hc.x+30&&this.y+30<=hc.y&&this.y+30<=hc.y+20)
+							{
+								return true;
+							} 
+						}
+					}
+					
+				}
+				
+				
+				break;
+			case 3:
+				//这个坦克向左
+				for(int i=0;i<hcs.size();i++)
+				{
+					//取出第一个坦克
+					HighCool hc=hcs.get(i);
+					//如果这个取出的坦克不是这个坦克
+					if(hc!=this)
+					{
+						//其他的坦克向上或者向下
+						if(hc.direct==0||hc.direct==2)
+						{
+							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y>=hc.y&&this.y<=hc.y+30)
+							{
+								return true;
+							}
+							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y<=hc.y&&this.y<=hc.y+30)
+							{
+								return true;
+							}
+						}
+						
+						
+						//敌人的坦克是向右或者左
+						if(hc.direct==3||hc.direct==1)
+						{
+							if(this.x>=hc.x&&this.x<=hc.x+30&&this.y+20>=hc.y&&this.y+20<=hc.y+20)
+							{
+								return true;
+							}
+							if(this.x>=hc.x&&this.x<=hc.x+30&&this.y+20<=hc.y&&this.y+20<=hc.y+20)
+							{
+								return true;
+							} 
+						}
+					}
+					
+				}
+				
+				
+				break;
+			}
+			
+			return b;
+		}
+		
+		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -172,7 +357,7 @@ class Shoot implements Runnable
 					//再换方向
 					for(int i=0;i<30;i++)
 					{
-						if(y>0)
+						if(y>0&&!this.isTouchOtherEnemy())
 						{
 					    y-=speed;
 						}
@@ -189,7 +374,7 @@ class Shoot implements Runnable
 				case 1:
 					for(int i=0;i<30;i++)
 					{
-						if(x<360)
+						if(x<360&&!this.isTouchOtherEnemy())
 						{
 				           x+=speed;
 						}
@@ -204,7 +389,7 @@ class Shoot implements Runnable
 				case 2:
 					for(int i=0;i<30;i++)
 					{
-						if(y<235)
+						if(y<235&&!this.isTouchOtherEnemy())
 						{
 					       y+=speed;
 						}
@@ -219,7 +404,7 @@ class Shoot implements Runnable
 				case 3:
 					for(int i=0;i<30;i++)
 					{
-						if(x>0)
+						if(x>0&&!this.isTouchOtherEnemy())
 						{
 					      x-=speed;
 						}
