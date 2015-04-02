@@ -89,25 +89,19 @@ public class TankWar2Thread extends JFrame {
 				t2.start();
 				highcool.add(hc);
 			}
-			try{
-				ima1=ImageIO.read(new File("big.png"));
-				ima2=ImageIO.read(new File("small.png"));
-				ima3=ImageIO.read(new File("middle.png"));
-			}catch(Exception e){
-				
-			}
+			
 			//初始化爆炸图片
 			try{
 				ima1=ImageIO.read(new File("big.png"));
-				ima2=ImageIO.read(new File("small.png"));
-				ima3=ImageIO.read(new File("middle.png"));
+				ima2=ImageIO.read(new File("middle.png"));
+				ima3=ImageIO.read(new File("small.png"));
 			}catch(Exception e){
 				
 			}
 		//	ima1=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
 		//	ima2=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/middle.png"));
 		//	ima3=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
-		//	
+		//	 
 		}
 	//重写paint函数,画出自己的坦克
 		public void paint(Graphics g)
@@ -143,15 +137,15 @@ public class TankWar2Thread extends JFrame {
 				Bomb b=bombs.get(i);
 				if(b.life>6)
 				{
-					//g.drawImage(ima3, b.x, b.y, 30,30,this);
+					g.drawImage(ima3, b.x, b.y, 30,30,this);
 				}
 				else if(b.life>3)
 				{
-					//g.drawImage(ima2, b.x, b.y, 30,30,this);
+					g.drawImage(ima2, b.x, b.y, 30,30,this);
 				}
 			    else
 				{
-					//g.drawImage(ima1, b.x, b.y, 30,30,this);
+					g.drawImage(ima1, b.x, b.y, 30,30,this);
 				}
 				//之后让b的生命值减小
 				b.lifeDown();
