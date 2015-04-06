@@ -18,8 +18,11 @@
  * 10.可记录玩家成绩
  *    10.1用文件流的形式（小游戏用文件，打游戏用数据库）
  *    10.2单写一个类，完成玩家的记录
- *    10.3 先完成报讯，攻击会了多少敌人的坦克
+ *    10.3 先写函数keepRecorder攻击了敌人多少坦克显示出来，存在文件中
+ *    10.4 再写一个函数getRecorder打开战场是拿出来战绩
+ *    10.5 存盘退出游戏时，可以记录玩家当时的敌人的坐标，并可以恢复
  * 11java操作声音文件
+ *    11.1加声音文件
  * 
  */
 package hate4;
@@ -43,6 +46,10 @@ public class TankWar2Thread extends JFrame implements ActionListener{
 	JMenuItem jmi1=null;
 	//退出系统菜单
 	JMenuItem jmi2=null;
+	//存盘退出的菜单
+	JMenuItem jmi3=null;
+	//恢复退出时状态
+	JMenuItem jmi4=null;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -62,16 +69,26 @@ public class TankWar2Thread extends JFrame implements ActionListener{
 		jmi1=new JMenuItem("start new game(N)");
 		jmi2=new JMenuItem("exit game(E)");
 		jmi2.setMnemonic('E');
+		jmi3=new JMenuItem("save exit (S)");
+		jmi3.setMnemonic('S');
+		jmi4=new JMenuItem("continue (C)");
+		jmi4.setMnemonic('C');
 		
 		//对jmi1,jmi2加监听
 		jmi1.addActionListener(this);
 		jmi1.setActionCommand("new game");
-		jmi2.addActionListener(this);
+		jmi2.addActionListener(this); 
 		jmi2.setActionCommand("exit game");
+		jmi3.addActionListener(this); 
+		jmi3.setActionCommand("save exit");
+		jmi4.addActionListener(this); 
+		jmi4.setActionCommand("continue");
 		
 		//添加
         jm1.add(jmi1);
         jm1.add(jmi2);
+        jm1.add(jmi3);
+        jm1.add(jmi4);
 		jmb.add(jm1);
 		
 		msp=new myStartPanel();
@@ -93,7 +110,7 @@ public class TankWar2Thread extends JFrame implements ActionListener{
 		if(e.getActionCommand().equals("new game"))
 		{
 			//创建战场面板
-			mytp=new MyTankPanel();
+			mytp=new MyTankPanel("newGame");
 			Thread t=new Thread(mytp);
 			t.start();
 			//先删除提示开始游戏的面板，再添加新的战场面板
@@ -107,7 +124,30 @@ public class TankWar2Thread extends JFrame implements ActionListener{
 			Recorder.keepRecording();
 			//用户退出系统菜单
 			System.exit(0);
+		}else if(e.getActionCommand().equals("save exit"))
+		{    //对存盘退出处理
+			//先知道面板上的坦克的死亡情况
+			Recorder rd=new Recorder();
+			rd.setHhcc(mytp.highcool);
+			//保存敌人的数量和坐标
+		    rd.keepRecordEnemyTank();
+		    //退出
+			System.exit(0);
+			
+		}else if(e.getActionCommand().equals("continue"))
+		{
+			//调用函数恢复
+			//创建战场面板
+			mytp=new MyTankPanel("continue");
+			Thread t=new Thread(mytp);
+			t.start();
+			//先删除提示开始游戏的面板，再添加新的战场面板
+			this.remove(msp);
+			this.add(mytp);
+			this.addKeyListener(mytp);
+			this.setVisible(true);
 		}
+		
 }
 	
 	
@@ -156,8 +196,9 @@ public class TankWar2Thread extends JFrame implements ActionListener{
 	{
 	//定义一个自己的坦克
 		Masa masa=null;
-	//定义敌人的tanke
+		//定义敌人的tanke
 		Vector<HighCool> highcool=new Vector<HighCool>();
+		Vector<Node> nodes=new Vector<Node>();
 		//定义炸弹集合
 	    Vector<Bomb> bombs=new Vector<Bomb>();
 	    int hcNum=3;
@@ -168,15 +209,19 @@ public class TankWar2Thread extends JFrame implements ActionListener{
 	    
 	    
 	//构造函数
-		public MyTankPanel()
+		public MyTankPanel(String flag)
 		{
+			//打开战场时，需要把原来记录在文件中的战绩读出来显示面板右侧
+			Recorder.getRecorder();
 			//初始化自己的坦克
 			masa=new Masa(150,200);
 			//masa.setColor(0);
-			
-			//初始化敌人的坦克
-			for(int i=0;i<hcNum;i++)
-			{ 
+			//判断开始新游戏还还是继续上一局
+			if(flag.equals("newGame"))
+			{
+			//初始化新一局的敌人的坦克
+			  for(int i=0;i<hcNum;i++)
+			  { 
 				//创建一个敌人坦克
 				HighCool hc=new HighCool((i+1)*70,10);
 			    //hc.setColor(1);
@@ -194,6 +239,30 @@ public class TankWar2Thread extends JFrame implements ActionListener{
 				Thread t2=new Thread(hcs);
 				t2.start();
 				highcool.add(hc);
+			  }
+			}else{
+				//初始化敌人的坦克
+				nodes=new Recorder().getNodesAndEnNum();
+				  for(int i=0;i<nodes.size();i++)
+				  { 
+					  Node node=nodes.get(i);
+				       //创建一辆敌人的坦克对象
+					  HighCool hc=new HighCool(node.x,node.y);
+				    //hc.setColor(1);
+					hc.setDirect(node.direct);
+					// 将MyPanel的敌人坦克向量交给敌人的坦克
+					hc.setHcs(highcool); 
+					//启动敌人的坦克
+					Thread t=new Thread(hc);
+					t.start();
+					//当敌人的坦克干干创建的时候给其添加一个子弹,并加到敌人的中
+					Shoot hcs=new Shoot(hc.x+10,hc.y+30,2);
+					hc.hcShoot.add(hcs);
+					//需要启动敌人的子弹
+					Thread t2=new Thread(hcs);
+					t2.start();
+					highcool.add(hc);
+				  }
 			}
 			
 			//初始化爆炸图片

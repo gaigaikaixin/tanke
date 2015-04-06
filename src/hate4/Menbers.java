@@ -4,6 +4,20 @@ import java.io.*;
 
 import hate4.TankWar2Thread;
 
+//坦克恢复点类
+class Node
+{
+	int x;
+	int y;
+	int direct;
+	public Node(int x,int y,int deirect)
+	{
+		this.x=x;
+		this.y=y;
+		this.direct=direct;
+	}
+}
+
 //记录类，记录玩家的各种信息，在战场的下面显示剩余坦克，右面显示战绩
 class Recorder
 {
@@ -11,6 +25,8 @@ class Recorder
   private static int enNum=20;
    //记录我有多少可以用的人
   private static int myLife=3;
+  //保存从文件中恢复记录的坦克坐标
+  static Vector<Node> nodes=new Vector<Node>();
   //记录总共消灭了多少敌人
   private static int dieEnNum=0;
   public static int getDieEnNum() {
@@ -46,15 +62,122 @@ class Recorder
 	{
 		myLife--;
 	}
-	
-	//写一个函数，把玩家机会敌人坦克数量保存到文件中
+	//保存打死敌人的数量和敌人坦克的坐标,方向
+	private  Vector<HighCool> hhcc=new Vector<HighCool>();
+	public  Vector<HighCool> getHhcc() {
+		return hhcc;
+	}
+	public void setHhcc(Vector<HighCool> hhcc) {
+		this.hhcc = hhcc;
+	}
+	//从记录中恢复坦克的坐标函数，读取记录文件
+	public Vector<Node> getNodesAndEnNum()
+	{
+		try {
+			//先回复坦克数量
+			fr=new FileReader("F:/javaTest/myTanke/gameRecord.txt");
+		    br=new BufferedReader(fr);
+		    String n=" ";
+		    //先读取第一行
+		    n=br.readLine();;
+		    dieEnNum=Integer.parseInt(n);
+		    //再开始读坐标
+		    while((n=br.readLine())!=null)
+		    {
+		    	String []xyz=n.split(" ");
+		    	for(int i=0;i<xyz.length;i++)
+		    	{
+		    		Node node=new Node(Integer.parseInt(xyz[0]),Integer.parseInt(xyz[1]),Integer.parseInt(xyz[2]));
+		    		nodes.add(node);
+		    	}
+		    }
+		      
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				br.close();
+				fr.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return nodes;
+	}
+     //开始存记录
+	private static FileReader fr=null;
+	private static BufferedReader br=null;
 	private static FileWriter fw=null;
 	private static BufferedWriter bw=null;
+	//保存打死敌人的数量和敌人坦克的坐标,方向
+	public  void keepRecordEnemyTank()
+	{
+		try {
+			//创建文件流,先保存打死的坦克数量
+			fw=new FileWriter("F:/javaTest/myTanke/gameRecord.txt");
+			bw=new BufferedWriter(fw);
+			bw.write(dieEnNum+"\r\n");
+			//再保存活着的坦克坐标
+			for(int i=0;i<hhcc.size();i++)
+			{
+				//取出第一个坦克
+				HighCool h=hhcc.get(i);
+				if(h.isLive)
+				{
+					String record=h.x+" "+h.y+" "+h.direct;
+					//写入
+					bw.write(record+"\r\n");
+				}
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				//后来的先关闭
+				bw.close();
+				fw.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}	
+	
+	
+	//从keepWriter记录的文件中读出记录玩家的战绩
+	public static void getRecorder()
+	{
+		try {
+			fr=new FileReader("F:/javaTest/myTanke/gameRecord.txt");
+		    br=new BufferedReader(fr);
+		    String n=br.readLine();
+		    dieEnNum=Integer.parseInt(n);
+		    
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				br.close();
+				fr.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	
+	}
+	
+	//写一个函数，把玩家机会敌人坦克数量保存到文件中
 	public static void keepRecording()
 	{
 		try {
 			//穿件文件流
-			fw=new FileWriter("F:/javaTest/gameRecord.txt");
+			fw=new FileWriter("F:/javaTest/myTanke/gameRecord.txt");
 			bw=new BufferedWriter(fw);
 			bw.write(dieEnNum+"\r\n");
 		} catch (Exception e) {
