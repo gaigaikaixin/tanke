@@ -63,7 +63,7 @@ public class TankWar2Thread extends JFrame {
 		Vector<HighCool> highcool=new Vector<HighCool>();
 		//定义炸弹集合
 	    Vector<Bomb> bombs=new Vector<Bomb>();
-	    int hcNum=3;
+	    int hcNum=10;
 	    //爆炸的三张图片,组成一颗炸弹
 	    Image ima1=null;
 	    Image ima2=null;

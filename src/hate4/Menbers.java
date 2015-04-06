@@ -188,11 +188,13 @@ class Shoot implements Runnable
 						//其他的坦克向上或者向下
 						if(hc.direct==0||hc.direct==2)
 						{
+							//左点
 							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y>=hc.y&&this.y<=hc.y+30)
 							{
 								return true;
 							}
-							if(this.x>=hc.x&&this.x+20<=hc.x+20&&this.y<=hc.y&&this.y<=hc.y+30)
+							//右点
+							if(this.x+20>=hc.x&&this.x+20<=hc.x+20&&this.y<=hc.y&&this.y<=hc.y+30)
 							{
 								return true;
 							}
@@ -206,7 +208,7 @@ class Shoot implements Runnable
 							{
 								return true;
 							}
-							if(this.x>=hc.x&&this.x+20<=hc.x+30&&this.y<=hc.y&&this.y<=hc.y+20)
+							if(this.x+20>=hc.x&&this.x+20<=hc.x+30&&this.y<=hc.y&&this.y<=hc.y+20)
 							{
 								return true;
 							} 
@@ -228,11 +230,13 @@ class Shoot implements Runnable
 						//其他的坦克向上或者向下
 						if(hc.direct==0||hc.direct==2)
 						{
+							//上点
 							if(this.x+30>=hc.x&&this.x+30<=hc.x+20&&this.y>=hc.y&&this.y<=hc.y+30)
 							{
 								return true;
 							}
-							if(this.x+30>=hc.x&&this.x+30<=hc.x+20&&this.y<=hc.y&&this.y<=hc.y+30)
+							//下点
+							if(this.x+30>=hc.x&&this.x+30<=hc.x+20&&this.y+20<=hc.y&&this.y+20<=hc.y+30)
 							{
 								return true;
 							}
@@ -242,7 +246,7 @@ class Shoot implements Runnable
 						//敌人的坦克是向右或者左
 						if(hc.direct==3||hc.direct==1)
 						{
-							if(this.x+30>=hc.x&&this.x+30<=hc.x+30&&this.y+20>=hc.y&&this.y+20<=hc.y+20)
+							if(this.x+30>=hc.x&&this.x+30<=hc.x+30&&this.y>=hc.y&&this.y<=hc.y+20)
 							{
 								return true;
 							}
@@ -268,11 +272,13 @@ class Shoot implements Runnable
 						//其他的坦克向上或者向下
 						if(hc.direct==0||hc.direct==2)
 						{
+							//左点
 							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y+30>=hc.y&&this.y+30<=hc.y+30)
 							{
 								return true;
 							}
-							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y+30<=hc.y&&this.y+30<=hc.y+30)
+							//右点
+							if(this.x+20>=hc.x&&this.x+20<=hc.x+20&&this.y+30<=hc.y&&this.y+30<=hc.y+30)
 							{
 								return true;
 							}
@@ -282,7 +288,7 @@ class Shoot implements Runnable
 						//敌人的坦克是向右或者左
 						if(hc.direct==3||hc.direct==1)
 						{
-							if(this.x+20>=hc.x&&this.x+20<=hc.x+30&&this.y+30>=hc.y&&this.y+30<=hc.y+20)
+							if(this.x>=hc.x&&this.x<=hc.x+30&&this.y+30>=hc.y&&this.y+30<=hc.y+20)
 							{
 								return true;
 							}
@@ -309,11 +315,13 @@ class Shoot implements Runnable
 						//其他的坦克向上或者向下
 						if(hc.direct==0||hc.direct==2)
 						{
+							//上点
 							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y>=hc.y&&this.y<=hc.y+30)
 							{
 								return true;
 							}
-							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y<=hc.y&&this.y<=hc.y+30)
+							//下点
+							if(this.x>=hc.x&&this.x<=hc.x+20&&this.y<=hc.y+20&&this.y+20<=hc.y+30)
 							{
 								return true;
 							}
@@ -323,7 +331,7 @@ class Shoot implements Runnable
 						//敌人的坦克是向右或者左
 						if(hc.direct==3||hc.direct==1)
 						{
-							if(this.x>=hc.x&&this.x<=hc.x+30&&this.y+20>=hc.y&&this.y+20<=hc.y+20)
+							if(this.x>=hc.x&&this.x<=hc.x+30&&this.y>=hc.y&&this.y<=hc.y+20)
 							{
 								return true;
 							}
