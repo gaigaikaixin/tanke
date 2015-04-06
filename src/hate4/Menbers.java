@@ -1,7 +1,78 @@
 package hate4;
-import java.util.Vector;
+import java.util.*;
+import java.io.*;
 
 import hate4.TankWar2Thread;
+
+//记录类，记录玩家的各种信息，在战场的下面显示剩余坦克，右面显示战绩
+class Recorder
+{
+	 //记录每关有多少敌人
+  private static int enNum=20;
+   //记录我有多少可以用的人
+  private static int myLife=3;
+  //记录总共消灭了多少敌人
+  private static int dieEnNum=0;
+  public static int getDieEnNum() {
+	return dieEnNum;
+}
+  public static void setDieEnNum(int dieEnNUm) {
+	Recorder.dieEnNum = dieEnNum;
+  }
+  public static int getEnNum() {
+		return enNum;
+	}
+	public static void setEnNum(int enNum) {
+		Recorder.enNum = enNum;
+	}
+	public static int getMyLife() {
+		return myLife;
+	}
+	public static void setMyLife(int myLife) {
+		Recorder.myLife = myLife;
+	}
+	//想打中敌人的时候，减少敌人的数量
+	public static void reduceEnNum()
+	{
+		enNum--;
+	}
+	//当消灭敌人的时候,战场右面显示的我的战绩增长
+	public static void addDieEnNum()
+	{
+		dieEnNum++;
+	}
+	//敌人打中我的时候我的生命减少
+	public static void reducemyNum()
+	{
+		myLife--;
+	}
+	
+	//写一个函数，把玩家机会敌人坦克数量保存到文件中
+	private static FileWriter fw=null;
+	private static BufferedWriter bw=null;
+	public static void keepRecording()
+	{
+		try {
+			//穿件文件流
+			fw=new FileWriter("F:/javaTest/gameRecord.txt");
+			bw=new BufferedWriter(fw);
+			bw.write(dieEnNum+"\r\n");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				//后来的先关闭
+				bw.close();
+				fw.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
 //炸弹类
 class Bomb
 {
