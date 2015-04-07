@@ -2,7 +2,64 @@ package hate4;
 import java.util.*;
 import java.io.*;
 
+import javax.sound.sampled.*;
+
 import hate4.TankWar2Thread;
+
+//播放声音文件类
+class PlayMusic extends Thread
+{
+	private String filename;
+	public PlayMusic(String wavfile)
+	{
+		filename=wavfile;
+	 }
+	public void run()
+	{
+		File soundFile=new File(filename);
+		AudioInputStream audioInputStream=null;
+		try {
+			audioInputStream=AudioSystem.getAudioInputStream(soundFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}	
+		AudioFormat format=audioInputStream.getFormat();
+		SourceDataLine auline=null;
+		DataLine.Info info=new DataLine.Info(SourceDataLine.class,format);
+		
+		try {
+			auline=(SourceDataLine) AudioSystem.getLine(info);
+			auline.open(format);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return;
+		}
+		 auline.start();
+		 int nBytesRead=0;
+		 //这个是缓冲
+		 byte[] abData=new byte[1024];
+		 try{
+			 while(nBytesRead!=-1)
+			 {
+				 nBytesRead=audioInputStream.read(abData, 0, abData.length);
+			     if(nBytesRead>=0)
+			     {
+			    	auline.write(abData, 0, nBytesRead) ;
+			     }
+			 }
+		 }catch(IOException e){
+			 e.printStackTrace();
+			 return;
+		 }finally{
+			 auline.drain();
+			 auline.close();
+		 }
+	}
+    
+}
 
 //坦克恢复点类
 class Node
@@ -75,7 +132,7 @@ class Recorder
 	{
 		try {
 			//先回复坦克数量
-			fr=new FileReader("F:/javaTest/myTanke/gameRecord.txt");
+			fr=new FileReader("D:/gameRecord.txt");
 		    br=new BufferedReader(fr);
 		    String n=" ";
 		    //先读取第一行
@@ -116,7 +173,7 @@ class Recorder
 	{
 		try {
 			//创建文件流,先保存打死的坦克数量
-			fw=new FileWriter("F:/javaTest/myTanke/gameRecord.txt");
+			fw=new FileWriter("D:/gameRecord.txt");
 			bw=new BufferedWriter(fw);
 			bw.write(dieEnNum+"\r\n");
 			//再保存活着的坦克坐标
@@ -152,7 +209,7 @@ class Recorder
 	public static void getRecorder()
 	{
 		try {
-			fr=new FileReader("F:/javaTest/myTanke/gameRecord.txt");
+			fr=new FileReader("D:/gameRecord.txt");
 		    br=new BufferedReader(fr);
 		    String n=br.readLine();
 		    dieEnNum=Integer.parseInt(n);
@@ -177,7 +234,7 @@ class Recorder
 	{
 		try {
 			//穿件文件流
-			fw=new FileWriter("F:/javaTest/myTanke/gameRecord.txt");
+			fw=new FileWriter("D:/gameRecord.txt");
 			bw=new BufferedWriter(fw);
 			bw.write(dieEnNum+"\r\n");
 		} catch (Exception e) {

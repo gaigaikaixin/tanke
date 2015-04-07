@@ -273,10 +273,18 @@ public class TankWar2Thread extends JFrame implements ActionListener{
 			}catch(Exception e){
 				
 			}
-		//	ima1=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
-		//	ima2=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/middle.png"));
-		//	ima3=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
-		//	 
+			//或者这种，但是上面的效果好
+            //ima1=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
+			//	ima2=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/middle.png"));
+			//	ima3=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("image2/big.png"));
+			//	 
+			
+			//播放开战声音
+			PlayMusic pm=new PlayMusic("D:/music.mp3");
+			pm.start();
+			
+			
+		
 		}
 		
 		//画卖出各种坦克的信息,
